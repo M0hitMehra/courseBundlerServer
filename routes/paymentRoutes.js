@@ -7,7 +7,7 @@ const router = express.Router()
 router.route('/subscribe').get(isAuthenticated , buySubscription )
 
 // Verfiy
-router.route('/paymentverification').post( paymentVerfication )
+router.route('/paymentverification').post(isAuthenticated , paymentVerfication )
 
 //get razorpay key
 router.route('/razorpaykey').get( getRazorPayKey )

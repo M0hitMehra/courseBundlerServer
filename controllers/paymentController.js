@@ -3,7 +3,7 @@ import { User } from "../models/User.js";
 import { Payment } from "../models/Payment.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { instance } from "../server.js";
-import crypto, { verify } from "crypto";
+import crypto from "crypto";
 
 export const buySubscription = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user.id);
@@ -48,10 +48,7 @@ export const paymentVerfication = catchAsyncError(async (req, res, next) => {
   const isAuthentic = generated_signature === razorpay_signature;
 
   if (!isAuthentic)
-  return next(
-    new ErrorHandler("Payment Not verified", 400)
-  );
-    // return res.redirect(`${process.env.FRONTEND_URL}/paymentfail`);
+    return res.redirect(`${process.env.FRONTEND_URL}/paymentfail`);
 
   await Payment.create({
     razorpay_signature,
@@ -63,14 +60,9 @@ export const paymentVerfication = catchAsyncError(async (req, res, next) => {
 
   await user.save();
 
-  // res.redirect(
-  //   `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
-  // );
-  res.status(200).json({
-    success: true,
-    message: "Payment verified successfully",
-    redirect:`${process.env.FRONTEND_URL}/paymentsuccess?reference${razorpay_payment_id}`
-  })
+  res.redirect(
+    `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
+  );
 });
 
 export const getRazorPayKey = catchAsyncError(async (req, res, next) => {
