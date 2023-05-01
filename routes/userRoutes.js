@@ -47,7 +47,7 @@ router.route('/resetpassword/:token').put( resetPassword)
 
 router.route('/admin/users').get(isAuthenticated ,authorizeAdmin ,getAllUsers)
 
-router.route('/admin/user/:id').get(isAuthenticated ,authorizeAdmin ,updateUsers).delete(isAuthenticated ,authorizeAdmin , deleteUser)
+router.route('/admin/user/:id').put(isAuthenticated ,authorizeAdmin ,updateUsers).delete(isAuthenticated ,authorizeAdmin , deleteUser)
 
 
 export default router

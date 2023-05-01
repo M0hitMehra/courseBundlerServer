@@ -47,7 +47,8 @@ export const paymentVerfication = catchAsyncError(async (req, res, next) => {
 
   const isAuthentic = generated_signature === razorpay_signature;
 
-  if (!isAuthentic)
+  if (isAuthentic)
+    
     return res.redirect(`${process.env.FRONTEND_URL}/paymentfail`);
 
   await Payment.create({
@@ -63,6 +64,7 @@ export const paymentVerfication = catchAsyncError(async (req, res, next) => {
   res.redirect(
     `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
   );
+  console.log(isAuthentic)
 });
 
 export const getRazorPayKey = catchAsyncError(async (req, res, next) => {
