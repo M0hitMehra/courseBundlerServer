@@ -32,11 +32,11 @@ export const buySubscription = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export const paymentVerification = catchAsyncError(async (req, res, next) => {
+export const paymentVerfication = catchAsyncError(async (req, res, next) => {
   const { razorpay_signature, razorpay_payment_id, razorpay_subscription_id } =
     req.body;
 
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user.id);
 
   const subscription_id = user.subscription.id;
 
@@ -48,9 +48,9 @@ export const paymentVerification = catchAsyncError(async (req, res, next) => {
   const isAuthentic = generated_signature === razorpay_signature;
 
   if (!isAuthentic)
+    
     return res.redirect(`${process.env.FRONTEND_URL}/paymentfail`);
 
-  // database comes here
   await Payment.create({
     razorpay_signature,
     razorpay_payment_id,
@@ -64,6 +64,7 @@ export const paymentVerification = catchAsyncError(async (req, res, next) => {
   res.redirect(
     `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
   );
+  console.log(isAuthentic)
 });
 
 export const getRazorPayKey = catchAsyncError(async (req, res, next) => {
